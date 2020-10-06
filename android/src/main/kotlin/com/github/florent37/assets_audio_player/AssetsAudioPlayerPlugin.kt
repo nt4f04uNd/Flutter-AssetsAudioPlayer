@@ -44,6 +44,15 @@ class AssetsAudioPlayerPlugin : FlutterPlugin, PluginRegistry.NewIntentListener,
     companion object {
         var instance: AssetsAudioPlayerPlugin? = null
         var displayLogs = false
+        @JvmStatic
+        val players = mutableMapOf<String, Player>()
+        @JvmStatic
+        fun releasePlayers() {
+            players.values.forEach {
+                it.stop()
+            }
+            players.clear()
+        }
     }
 
     var assetsAudioPlayer: AssetsAudioPlayer? = null
@@ -119,14 +128,14 @@ class AssetsAudioPlayer(
     private val uriResolver = UriResolver(context)
     private val stopWhenCallListener = object : StopWhenCall.Listener {
         override fun onPhoneStateChanged(audioState: StopWhenCall.AudioState) {
-            players.values.forEach {
+            AssetsAudioPlayerPlugin.players.values.forEach {
                 it.updateEnableToPlay(audioState)
             }
         }
     }
 
     private val onHeadsetPluggedListener = { plugged: Boolean ->
-        players.values.forEach {
+        AssetsAudioPlayerPlugin.players.values.forEach {
             it.onHeadsetPlugged(plugged)
         }
     }
@@ -149,20 +158,14 @@ class AssetsAudioPlayer(
         stopWhenCall.stop()
         notificationManager.hideNotificationService(definitively = true)
         stopWhenCall.unregister(stopWhenCallListener)
-        players.values.forEach {
-            it.stop()
-        }
-        players.clear()
     }
 
-    private val players = mutableMapOf<String, Player>()
-
     fun getPlayer(id: String): Player? {
-        return this.players[id]
+        return AssetsAudioPlayerPlugin.players[id]
     }
 
     private fun getOrCreatePlayer(id: String): Player {
-        return players.getOrPut(id) {
+        return AssetsAudioPlayerPlugin.players.getOrPut(id) {
             val channel = MethodChannel(messenger, "assets_audio_player/$id")
             val player = Player(
                     context = context,
