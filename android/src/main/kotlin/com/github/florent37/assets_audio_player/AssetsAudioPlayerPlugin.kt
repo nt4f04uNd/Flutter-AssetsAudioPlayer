@@ -117,7 +117,6 @@ class AssetsAudioPlayer(
     private var headsetManager = HeadsetManager(context)
     private val notificationManager = NotificationManager(context)
     private val uriResolver = UriResolver(context)
-    private var mediaButtonsReceiver: MediaButtonsReceiver? = null
     private val stopWhenCallListener = object : StopWhenCall.Listener {
         override fun onPhoneStateChanged(audioState: StopWhenCall.AudioState) {
             players.values.forEach {
@@ -139,15 +138,6 @@ class AssetsAudioPlayer(
 
         headsetManager.onHeadsetPluggedListener = onHeadsetPluggedListener
         headsetManager.start()
-
-        mediaButtonsReceiver = MediaButtonsReceiver(context,
-                onAction = {
-                    onMediaButton(it)
-                },
-                onNotifSeek = { position ->
-                    onNotifSeekPlayer(position)
-                }
-        )
 
         val channel = MethodChannel(messenger, "assets_audio_player")
         channel.setMethodCallHandler(this)
