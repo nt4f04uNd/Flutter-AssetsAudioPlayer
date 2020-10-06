@@ -44,8 +44,11 @@ class AssetsAudioPlayerPlugin : FlutterPlugin, PluginRegistry.NewIntentListener,
     companion object {
         var instance: AssetsAudioPlayerPlugin? = null
         var displayLogs = false
-        @JvmStatic
         val players = mutableMapOf<String, Player>()
+        @JvmStatic
+        fun getPlayersIds(): MutableSet<String> {
+            return players.keys
+        }
         @JvmStatic
         fun releasePlayers() {
             players.values.forEach {
