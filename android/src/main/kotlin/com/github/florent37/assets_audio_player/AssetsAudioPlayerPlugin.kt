@@ -60,7 +60,7 @@ class AssetsAudioPlayerPlugin : FlutterPlugin, PluginRegistry.NewIntentListener,
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        assetsAudioPlayer?.unregister()
+        // assetsAudioPlayer?.unregister()
         instance = null
     }
 
