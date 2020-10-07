@@ -284,6 +284,7 @@ class AssetsAudioPlayer(
                     }
                     val removeNotification = args["removeNotification"] as? Boolean ?: true
                     getOrCreatePlayer(id).stop(removeNotification = removeNotification)
+                    AssetsAudioPlayerPlugin.players.remove(id)
                     result.success(null)
                 } ?: run {
                     result.error("WRONG_FORMAT", "The specified argument must be an Map<*, Any>.", null)
