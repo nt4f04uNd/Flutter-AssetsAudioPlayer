@@ -720,7 +720,7 @@ class AssetsAudioPlayer {
       final int value = argument;
       newValue = value;
     } else if (argument is double) {
-      final double value = argument;
+      final double value = argument.isNaN ? 0.0 : argument;
       newValue = value.round();
     }
     if (newValue != null) {
