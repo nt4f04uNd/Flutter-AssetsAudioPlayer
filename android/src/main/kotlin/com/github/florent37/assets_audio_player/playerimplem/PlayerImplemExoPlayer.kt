@@ -109,7 +109,7 @@ class PlayerImplemExoPlayer(
         get() = mediaPlayer?.currentPosition ?: 0
 
     override fun stop() {
-        mediaPlayer?.playWhenReady = false
+        // mediaPlayer?.playWhenReady = false
         mediaPlayer?.stop()
     }
 
